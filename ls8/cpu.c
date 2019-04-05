@@ -75,6 +75,14 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
     }
     break;
 
+  case ALU_AND:
+    cpu->registers[regA] = cpu->registers[regA] & cpu->registers[regB];
+    break;
+
+  case ALU_NOT:
+    cpu->registers[regA] = ~cpu->registers[regA];
+    break;
+
   default:
     break;
   }
@@ -164,7 +172,14 @@ void cpu_run(struct cpu *cpu)
         cpu->PC = cpu->registers[operandA];
         continue;
       }
+      break;
 
+    case AND:
+      alu(cpu, ALU_AND, operandA, operandB);
+      break;
+
+    case NOT:
+      alu(cpu, ALU_NOT, operandA, operandB);
       break;
 
     case HLT:
